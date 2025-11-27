@@ -1,23 +1,19 @@
 import { useRouter } from "expo-router";
 import React, { useContext, useState } from "react";
-import { Button, Text, TextInput, View, Alert, Modal } from "react-native";
+import { Button, Text, TextInput, View, Alert } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
   const { login, token } = useContext(AuthContext);
-  const [currentExpenseId, setCurrentExpenseId] = useState<string|null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [newAmount , setNewAmount] = useState(0);
-  const [newDescription, setNewDescription] = useState("");
   const [expenses, setExpenses] = useState([
     {
-      id: "1",
+      id: "e.id",
       desc: "e.description",
       amount: "e.amount",
       paid_by: "e.paid_by",
     },
     {
-      id: "2",
+      id: "e.id2",
       desc: "e.description",
       amount: "e.amount",
       paid_by: "e.paid_by",
@@ -37,46 +33,32 @@ export default function Login() {
     Alert.alert("Voy a borrar");
   };
 
-  const handleEdit = () => {
-    setModalVisible(false);
-    if (currentExpenseId == null) return;
-    handleDelete(currentExpenseId)
-    const newExpense = {
-        id: currentExpenseId,
-        desc: newDescription,
-        amount: newAmount,
-        paid_by: "e.paid_by",
-    }
-    setExpenses([...expenses, ])
-      Alert.alert(`voy a editar el gasto ${currentExpenseId} con cantidad ${newAmount} y con la descripción ${newDescription}`)
+  const handleEdit = (id : String) => {
+    for (let i = 0; i< expenses.length; i++) {
+        const element = expenses[i];
+        if(element.id == id){
+          Alert.alert(`${element.amount} - ${element.desc}`);
+        }
+      }
+      Alert.alert("Voy a editar");
   };
 
   const handleChange = (index: number, field: string, text: string) => {
     
   }
 
-  const openModal = (id: string) => {
-    setCurrentExpenseId(id);
-    setModalVisible(false);
-  }
 
   return (
     <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
       <Text>Mi grupo</Text>
       {expenses.map((e, index) => (
         <View key={e.id}>
-          <Text>{`${e.amount} - ${e.desc}`}</Text>
-          <Text>{e.desc}</Text>
+          <TextInput keyboardType="number-pad" onChangeText={(text)=>handleChange(index, "amount", text)}>{e.amount}</TextInput>
+          <TextInput>{e.desc}</TextInput>
           <Button title="Actualizar" onPress={()=> handleEdit(e.id)} />
           <Button title="Borrar" onPress={()=> handleDelete(e.id)} />
         </View>
       ))}
-
-      <Modal visible={modalVisible}>
-            <Text>Editando expense #{currentExpenseId}</Text>
-            <TextInput></TextInput>
-            <Button title= "Cancelar" onPress={() => setModalVisible(false)}/>
-      </Modal>
 
       <Button title="Volver a mis grupos" onPress={() => router.replace("/")} />
     </View>
