@@ -67,7 +67,7 @@ export default function Login() {
         <View key={e.id}>
           <Text>{`${e.amount} - ${e.desc}`}</Text>
           <Text>{e.desc}</Text>
-          <Button title="Actualizar" onPress={()=> handleEdit(e.id)} />
+          <Button title="Actualizar" onPress={()=> handleEdit()} />
           <Button title="Borrar" onPress={()=> handleDelete(e.id)} />
         </View>
       ))}
